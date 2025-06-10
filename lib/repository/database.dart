@@ -28,11 +28,10 @@ final class Database {
         .withConverter(fromFirestore: fromFirestore, toFirestore: toFirestore);
   }
 
-  void saveUser(User user) {
-    final UserDetail userDetail = UserDetail.fromFirebaseUser(user);
+  void saveUser(UserDetail userDetail) {
     FirebaseFirestore.instance
         .collection(_userList)
-        .doc(user.uid)
+        .doc(userDetail.uid)
         .set(userDetail.toMap(), SetOptions(merge: true));
   }
 

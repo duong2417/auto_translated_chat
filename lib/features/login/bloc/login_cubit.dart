@@ -8,6 +8,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:public_chat/repository/database.dart';
 import 'package:public_chat/service_locator/service_locator.dart';
 import 'package:public_chat/utils/bloc_extensions.dart';
+import 'package:devicelocale/devicelocale.dart';
+import 'package:public_chat/_shared/data/chat_data.dart';
 
 part 'login_state.dart';
 
@@ -61,7 +63,10 @@ class LoginCubit extends Cubit<LoginState> {
         return;
       }
 
-      database.saveUser(user);
+      final locale = await Devicelocale.currentAsLocale;
+      final languageCode = locale?.languageCode;
+      final userDetail = UserDetail.fromFirebaseUser(user, languageCode: languageCode);
+      database.saveUser(userDetail);
       emitSafely(LoginSuccess(user.displayName ?? 'Unknown display name'));
     } on FirebaseAuthException catch (e) {
       emitSafely(LoginFailed(e.toString()));

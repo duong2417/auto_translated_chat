@@ -27,16 +27,21 @@ final class UserDetail {
   final String displayName;
   final String? photoUrl;
   final String uid;
+  final String? languageCode; // Added field
 
-  UserDetail.fromFirebaseUser(User user)
+  UserDetail.fromFirebaseUser(User user, {this.languageCode}) // Modified constructor
       : displayName = user.displayName ?? 'Unknown',
         photoUrl = user.photoURL,
         uid = user.uid;
 
   UserDetail.fromMap(this.uid, Map<String, dynamic> map)
       : displayName = map['displayName'],
-        photoUrl = map['photoUrl'];
+        photoUrl = map['photoUrl'],
+        languageCode = map['languageCode']; // Added line
 
-  Map<String, dynamic> toMap() =>
-      {'displayName': displayName, 'photoUrl': photoUrl};
+  Map<String, dynamic> toMap() => {
+        'displayName': displayName,
+        'photoUrl': photoUrl,
+        'languageCode': languageCode, // Added line
+      };
 }

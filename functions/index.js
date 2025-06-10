@@ -56,12 +56,28 @@ exports.onChatWritten = v2.firestore.onDocumentWritten("/public/{messageId}", as
       return;
     }
   }
-  // Get list of languages from Firestore
   const db = admin.firestore();
+  // Get list of languages from user profiles
+  const usersCollection = db.collection("users"); // Changed collection name
+  const usersSnapshot = await usersCollection.get();
+  let userLanguages = new Set();
+  if (!usersSnapshot.empty) {
+    usersSnapshot.docs.forEach(doc => {
+      const userData = doc.data();
+      // Ensure userData and languageCode exist and languageCode is not empty
+      if (userData && userData.languageCode && userData.languageCode.trim() !== "") {
+        userLanguages.add(userData.languageCode.trim());
+      }
+    });
+  }
+  const languages = Array.from(userLanguages);
+  console.log("Target languages from user profiles:", languages);
+
+  // Fetch the "master" list of languages from the 'languages' collection for `saveNewLanguageCode`.
   const languagesCollection = db.collection("languages");
-  const languagesSnapshot = await languagesCollection.get();
-  const languages = languagesSnapshot.docs.map((e) => e.data().code);
-  console.log("Current languages in database:", languages);
+  const masterLanguagesSnapshot = await languagesCollection.get();
+  const masterLanguages = masterLanguagesSnapshot.docs.map((e) => e.data().code);
+  console.log("Current master languages in 'languages' collection:", masterLanguages);
 
   const generationConfig = {
     temperature: 1,
@@ -127,7 +143,7 @@ If you can't detect the language, return "und" as value of "detectedLanguage" fi
 
   // Save new language if detected
   if (detectedLanguage && detectedLanguage !== "und") {
-    await saveNewLanguageCode(languagesCollection, detectedLanguage, languages);
+    await saveNewLanguageCode(languagesCollection, detectedLanguage, masterLanguages);
   }
 
   // Update document with translation
