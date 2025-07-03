@@ -89,14 +89,7 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
         builder: (context, snapshot, child) {
           return Padding(
             padding: const EdgeInsets.all(8),
-            child: Column(
-              spacing: 8,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget?>[
-                _buildTextField(context),
-              ].nonNulls.toList(),
-            ),
+            child: _buildTextField(context),
           );
         });
   }

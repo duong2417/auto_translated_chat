@@ -118,7 +118,9 @@ class PolygonGradientPainter extends CustomPainter {
     }
 
     final list = transformPoints(points, size);
-    squares.forEach((e) => e.draw(canvas, list));
+    for (var e in squares) {
+      e.draw(canvas, list);
+    }
 
     final smallerSide = size.width > size.height ? size.width : size.height;
 

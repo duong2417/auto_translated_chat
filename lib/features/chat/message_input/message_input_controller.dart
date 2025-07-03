@@ -99,6 +99,16 @@ class MessageInputController extends ValueNotifier<Message> {
     message = message.clear();
   }
 
+  /// Sets the [message] to the initial [Message] value.
+  void reset({bool resetId = true}) {
+    if (resetId) {
+      const newId = ''; //TODO use uuid
+      _initialMessage = _initialMessage.copyWith(id: newId);
+    }
+    // Reset the message to the initial value.
+    message = _initialMessage;
+  }
+
   @override
   void dispose() {
     _textFieldController

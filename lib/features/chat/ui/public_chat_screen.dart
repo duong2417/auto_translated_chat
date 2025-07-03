@@ -57,11 +57,12 @@ class PublicChatScreen extends StatelessWidget {
                                 }
 
                                 return ChatBubble(
-                                  messageModel: message,
-                                  isMine: message.sender == user?.uid,
-                                  photoUrl: photoUrl,
-                                  displayName: displayName,
-                                );
+                                    messageModel: message,
+                                    isMine: message.sender == user?.uid,
+                                    message: message.message,
+                                    photoUrl: photoUrl,
+                                    displayName: displayName,
+                                    translations: message.translations);
                               },
                             ),
                           );

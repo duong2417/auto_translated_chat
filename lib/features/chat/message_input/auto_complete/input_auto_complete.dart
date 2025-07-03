@@ -32,17 +32,17 @@ class AutocompleteWidget extends StatefulWidget {
     this.focusNode,
     this.debounceDuration = const Duration(milliseconds: 300),
   });
-  static _AutocompleteWidgetState of(BuildContext context) {
-    final state = context.findAncestorStateOfType<_AutocompleteWidgetState>();
+  static AutocompleteWidgetState of(BuildContext context) {
+    final state = context.findAncestorStateOfType<AutocompleteWidgetState>();
     assert(state != null, 'StreamAutocomplete not found in the widget tree');
     return state!;
   }
 
   @override
-  State<AutocompleteWidget> createState() => _AutocompleteWidgetState();
+  State<AutocompleteWidget> createState() => AutocompleteWidgetState();
 }
 
-class _AutocompleteWidgetState extends State<AutocompleteWidget> {
+class AutocompleteWidgetState extends State<AutocompleteWidget> {
   late MessageInputController _messageEditingController;
   late FocusNode _focusNode;
 
@@ -163,19 +163,19 @@ class _AutocompleteWidgetState extends State<AutocompleteWidget> {
 
       // If the text field is not empty, then we need to check if the
       // text field contains a trigger.
-      final _triggerWithQuery = _getInvokedTriggerWithQuery(
+      final triggerWithQuery = _getInvokedTriggerWithQuery(
         messageValue,
         textEditingValue,
       );
 
       // If the text field does not contain a trigger, then there is no need
       // to do anything.
-      if (_triggerWithQuery == null) return closeSuggestions();
+      if (triggerWithQuery == null) return closeSuggestions();
 
       // If the text field contains a trigger, then we need to open the
       // portal.
-      final trigger = _triggerWithQuery.trigger;
-      final query = _triggerWithQuery.query;
+      final trigger = triggerWithQuery.trigger;
+      final query = triggerWithQuery.query;
       return showSuggestions(query, trigger);
     },
     widget.debounceDuration,
