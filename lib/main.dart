@@ -24,8 +24,10 @@ void main() async {
     /// NOTE: This setting is to run on Flutter web only
     /// to run on Flutter mobile, please set host to be your machine's IP address
     /// and update host in file firebase.json
-    FirebaseAuth.instance.useAuthEmulator('localhost', 8000);
-    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8002);
+    FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 8000);
+    FirebaseFirestore.instance.useFirestoreEmulator('127.0.0.1', 8080);
+    // FirebaseAuth.instance.useAuthEmulator('192.168.1.22', 8000);
+    // FirebaseFirestore.instance.useFirestoreEmulator('192.168.1.22', 8080);
   }
   ServiceLocator.instance.initialise();
   Global().init();
@@ -54,11 +56,11 @@ class MainApp extends StatelessWidget {
         supportedLocales: AppLocalizations.supportedLocales,
         home: BlocBuilder<AuthenticationCubit, AuthenticationState>(
             builder: (context, state) {
-          if (state is Authenticated) {
-            return const PublicChatScreen();
-          } else {
-            return const LoginScreen();
-          }
+          // if (state is Authenticated) {
+          return const PublicChatScreen();
+          // } else {
+          //   return const LoginScreen();
+          // }
         }));
   }
 }

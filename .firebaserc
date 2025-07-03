@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "proj-atc"
-  }
+    "default": "signinandsignupfirebaseconsole",
+    "atc": "signinandsignupfirebaseconsole",
+    "at": "sample-firebase-ai-app-5a345"
+  },
+  "targets": {},
+  "etags": {}
 }

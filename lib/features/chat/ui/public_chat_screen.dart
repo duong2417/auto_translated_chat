@@ -76,13 +76,13 @@ class PublicChatScreen extends StatelessWidget {
               ),
               MessageBox(
                 onSendMessage: (value) {
-                  if (user == null) {
-                    // do nothing
-                    return;
-                  }
-                  FirebaseFirestore.instance
-                      .collection('public')
-                      .add(Message(sender: user.uid, message: value).toMap());
+                  // if (user == null) {
+                  //   // do nothing
+                  //   return;
+                  // }
+                  FirebaseFirestore.instance.collection('public').add(
+                      Message(sender: user?.uid ?? 'uid null', message: value)
+                          .toMap());
                 },
               )
             ],

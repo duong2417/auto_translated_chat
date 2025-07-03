@@ -1,0 +1,2 @@
+/Users/nguyenthingocduong/auto_translated_chat/android/app/.cxx/Debug/3o47t354/x86_64/CMakeFiles/edit_cache.dir
+/Users/nguyenthingocduong/auto_translated_chat/android/app/.cxx/Debug/3o47t354/x86_64/CMakeFiles/rebuild_cache.dir
