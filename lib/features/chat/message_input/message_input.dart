@@ -34,13 +34,24 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
   void initState() {
     super.initState();
     _messageInputController = widget.messageInputController ??
-        MessageInputController(textPatternStyle: {
-          kMentionPattern: (context, text) => const TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-              ),
-        });
+        MessageInputController(
+          textPatternStyle: {
+            kMentionPattern: (context, text) => _getMentionStyle(text),
+          },
+        );
     _focusNode = widget.focusNode ?? FocusNode();
+  }
+
+  TextStyle _getMentionStyle(String mentionText) {
+    // Extract the username from the mention text (remove @ and [ ])
+    final username = mentionText.replaceAll(RegExp(r'[@\[\]]'), '');
+
+    // Check if this mention exists in the mentioned users list
+    final isValidMention = _messageInputController.mentionedUsers
+        .any((user) => user.id == username || user.name == username);
+
+    // Return highlight style only for valid mentions
+    return isValidMention ? mentionStyle : const TextStyle();
   }
 
   @override
@@ -112,8 +123,8 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
                   child: InkWell(
                     onTap: () {
                       messageInputController.addMentionedUser(mention);
-                      AutocompleteWidget.of(context)
-                          .acceptAutocompleteOption(mention.name);
+                      AutocompleteWidget.of(context).acceptAutocompleteOption(
+                          mention.id); //maybe replace id by name
                     },
                     child: MentionTile(
                       title: mention.name,
