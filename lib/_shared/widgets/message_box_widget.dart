@@ -4,7 +4,11 @@ class MessageBox extends StatefulWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final ValueChanged<String> onSendMessage;
-  const MessageBox({required this.onSendMessage, super.key, this.controller, this.focusNode});
+  const MessageBox(
+      {required this.onSendMessage,
+      super.key,
+      this.controller,
+      this.focusNode});
 
   @override
   State<MessageBox> createState() => _MessageBoxState();
@@ -12,11 +16,12 @@ class MessageBox extends StatefulWidget {
 
 class _MessageBoxState extends State<MessageBox> {
   late final TextEditingController _controller;
-@override
+  @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? TextEditingController();
   }
+
   @override
   void dispose() {
     if (widget.controller == null) {

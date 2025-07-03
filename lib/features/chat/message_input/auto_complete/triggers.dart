@@ -117,7 +117,6 @@ class AutocompleteQuery {
   final TextSelection selection;
 }
 
-
 class AutocompleteInvokedTriggerWithQuery {
   const AutocompleteInvokedTriggerWithQuery(this.trigger, this.query);
 

@@ -33,8 +33,13 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
   @override
   void initState() {
     super.initState();
-    _messageInputController =
-        widget.messageInputController ?? MessageInputController();
+    _messageInputController = widget.messageInputController ??
+        MessageInputController(textPatternStyle: {
+          kMentionPattern: (context, text) => const TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+              ),
+        });
     _focusNode = widget.focusNode ?? FocusNode();
   }
 
@@ -147,13 +152,15 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
       controller: _messageInputController.textFieldController,
       focusNode: _focusNode,
       onSendMessage: (value) {
-        if (widget.user == null) {
+        final trimmedValue = value.trim();
+        if (widget.user == null ||
+            widget.user!.uid.isEmpty ||
+            trimmedValue.isEmpty) {
           // do nothing
           return;
         }
-        FirebaseFirestore.instance
-            .collection('public')
-            .add(Message(sender: widget.user!.uid, message: value).toMap());
+        FirebaseFirestore.instance.collection('public').add(
+            Message(sender: widget.user!.uid, message: trimmedValue).toMap());
       },
     );
   }

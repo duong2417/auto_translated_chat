@@ -1,28 +1,29 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
+import 'package:public_chat/_shared/data/chat_data.dart';
+import 'package:public_chat/_shared/widgets/message_text.dart';
 
 import '../../utils/global.dart';
 
 class ChatBubble extends StatelessWidget {
   final bool isMine;
-  final String message;
+  final Message messageModel;
   final String? photoUrl;
   final String? displayName;
-  final Map<String, dynamic> translations;
 
   final double _iconSize = 24.0;
 
   const ChatBubble(
-      {required this.isMine,
-      required this.message,
+      {required this.messageModel,
       required this.photoUrl,
       required this.displayName,
-      this.translations = const {},
+      this.isMine = false,
       super.key});
 
   @override
   Widget build(BuildContext context) {
+    final translations = messageModel.translations;
     final List<Widget> widgets = [];
 
     // user avatar
@@ -65,13 +66,13 @@ class ChatBubble extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
           // original language
-          Text(
-            message,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: Colors.white),
-          ),
+          MessageText(
+              message: messageModel,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: Colors.white)),
+          // translated message
           if (translations.isNotEmpty &&
               translations.containsKey(Global.localLanguageCode) &&
               translations[Global.localLanguageCode] != null)
@@ -103,8 +104,8 @@ class ChatBubble extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: isMine ? Colors.black87 : Colors.grey)),
         TextSpan(
-          text:
-              translations[Global.localLanguageCode] ?? 'translation not found',
+          text: messageModel.translations[Global.localLanguageCode] ??
+              'translation not found',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontStyle: FontStyle.italic,
               color: isMine ? Colors.black87 : Colors.grey),

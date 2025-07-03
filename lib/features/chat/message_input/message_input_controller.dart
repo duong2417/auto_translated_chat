@@ -107,7 +107,7 @@ class MessageInputController extends ValueNotifier<Message> {
     super.dispose();
   }
 
-/// Returns the list of mentioned users in the message.
+  /// Returns the list of mentioned users in the message.
   List<MentionModel> get mentionedUsers => message.mentionedUsers;
 
   /// Sets the mentioned users.

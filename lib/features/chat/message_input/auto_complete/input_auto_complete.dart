@@ -52,54 +52,12 @@ class _AutocompleteWidgetState extends State<AutocompleteWidget> {
   bool _hideOptions = false;
   String _lastFieldText = '';
 
-  OverlayEntry? _overlayEntry;
-  final LayerLink _layerLink = LayerLink();
   // True if the state indicates that the options should be visible.
   bool get _shouldShowOptions {
     return !_hideOptions &&
         _focusNode.hasFocus &&
         _currentQuery != null &&
         _currentTrigger != null;
-  }
-
-  void _showOverlay() {
-    _hideOverlay();
-
-    if (!_shouldShowOptions) return;
-
-    _overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        width: MediaQuery.of(context).size.width,
-        child: CompositedTransformFollower(
-          link: _layerLink,
-          showWhenUnlinked: false,
-          offset: const Offset(0, 5),
-          child: Material(
-            elevation: 4,
-            child: Container(color: Colors.red, height: 20),
-          ),
-          // child: Material(
-          //   elevation: 4,
-          //   child: _currentTrigger?.optionsViewBuilder(
-          //         context,
-          //         _currentQuery ??
-          //             const AutocompleteQuery(
-          //                 query: 'b',
-          //                 selection: TextSelection.collapsed(offset: 1)),
-          //         _messageEditingController,
-          //       ) ??
-          //       Container(color: Colors.red, height: 20),
-          // ),
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(_overlayEntry!);
-  }
-
-  void _hideOverlay() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
   }
 
   /// Accepts and replaces the current query with the given [option] and closes
@@ -151,7 +109,6 @@ class _AutocompleteWidgetState extends State<AutocompleteWidget> {
     if (prev == null) return;
 
     _currentQuery = null;
-    _hideOverlay();
     if (mounted) setState(() {});
   }
 
@@ -168,9 +125,6 @@ class _AutocompleteWidgetState extends State<AutocompleteWidget> {
     _currentTrigger = trigger;
     if (mounted) {
       setState(() {});
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showOverlay();
-      });
     }
   }
 
@@ -231,13 +185,6 @@ class _AutocompleteWidgetState extends State<AutocompleteWidget> {
   void _onChangedFocus() {
     // Options should no longer be hidden when the field is re-focused.
     _hideOptions = !_focusNode.hasFocus;
-    if (!_focusNode.hasFocus) {
-      _hideOverlay();
-    } else if (_shouldShowOptions) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showOverlay();
-      });
-    }
     if (mounted) setState(() {});
   }
 
@@ -317,7 +264,6 @@ class _AutocompleteWidgetState extends State<AutocompleteWidget> {
       _focusNode.dispose();
     }
     _onChangedField.cancel();
-    _hideOverlay();
     super.dispose();
   }
 
@@ -353,18 +299,5 @@ class _AutocompleteWidgetState extends State<AutocompleteWidget> {
         );
       },
     );
-    print('Should show options: $_shouldShowOptions');
-    // return Builder(
-    //   builder: (context) {
-    //     return CompositedTransformTarget(
-    //       link: _layerLink,
-    //       child: widget.fieldViewBuilder(
-    //         context,
-    //         _messageEditingController,
-    //         _focusNode,
-    //       ),
-    //     );
-    //   },
-    // );
   }
 }

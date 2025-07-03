@@ -20,13 +20,13 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // if (kDebugMode) {
-  //   /// NOTE: This setting is to run on Flutter web only
-  //   /// to run on Flutter mobile, please set host to be your machine's IP address
-  //   /// and update host in file firebase.json
-  //   FirebaseAuth.instance.useAuthEmulator('localhost', 8000);//10.0.2.2
-  //   FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8002);
-  // }
+  if (kDebugMode) {
+    /// NOTE: This setting is to run on Flutter web only
+    /// to run on Flutter mobile, please set host to be your machine's IP address
+    /// and update host in file firebase.json
+    FirebaseAuth.instance.useAuthEmulator('localhost', 8000);//10.0.2.2
+    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8002);
+  }
   ServiceLocator.instance.initialise();
   Global().init();
   runApp(MultiBlocProvider(providers: [
