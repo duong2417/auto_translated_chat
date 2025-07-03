@@ -39,7 +39,7 @@ class MentionTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '@${subtitle}',
+                    '@$subtitle',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
