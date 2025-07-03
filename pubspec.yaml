@@ -37,6 +37,8 @@ dependencies:
   google_generative_ai: ^0.4.3
   image_network: ^2.5.6
   universal_html: ^2.2.4
+  flutter_portal: ^1.1.4
+  rate_limiter: ^1.0.0
 
 dev_dependencies:
   flutter_test:
