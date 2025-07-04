@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
 import 'package:public_chat/features/chat/message_input/models/mention_model.dart';
 import 'package:public_chat/features/chat/message_input/constants.dart';
+import 'package:public_chat/utils/extensions.dart';
 
 class MessageText extends StatelessWidget {
   const MessageText({
@@ -21,7 +22,7 @@ class MessageText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final messageText = message.message.trim();
+    final messageText = message.replaceMentions(linkify: false).message.trim();
     final defaultStyle = style ?? DefaultTextStyle.of(context).style;
 
     return RichText(
@@ -51,14 +52,12 @@ class MessageText extends StatelessWidget {
             ? (TapGestureRecognizer()
               ..onTap = () {
                 // Extract mention name without @ symbol
-                final mentionName = mentionText.substring(1);
-                // Create a MentionModel for the tapped mention
-                // Note: This is a simplified approach, you might want to
-                // match against actual mentioned users in the message
-                final mention = MentionModel(
-                  id: mentionName,
-                  name: mentionName,
-                  type: MentionType.user,
+                final mentionId = mentionText.substring(1);
+
+                // Find the mention in the message's mentionedUsers list
+                final mention = message.mentionedUsers.firstWhere(
+                  (user) => user.id == mentionId || user.name == mentionId,
+                  orElse: () => MentionModel(id: mentionId, name: mentionId),
                 );
                 onMentionTap!(mention);
               })

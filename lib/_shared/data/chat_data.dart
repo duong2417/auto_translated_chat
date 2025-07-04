@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:public_chat/features/chat/message_input/constants.dart';
 import 'package:public_chat/features/chat/message_input/models/mention_model.dart';
 
 final class Message {
@@ -15,7 +16,7 @@ final class Message {
       : id = '',
         timestamp = Timestamp.now(),
         translations = {},
-        mentionedUsers = [];
+        mentionedUsers = defaultMentions;
 
   Message.fromMap(this.id, Map<String, dynamic> map)
       : message = map['message'] ?? '',

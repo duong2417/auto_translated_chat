@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:public_chat/_shared/data/chat_data.dart';
 import 'package:public_chat/_shared/simple_safe_area.dart';
 import 'package:public_chat/_shared/widgets/message_box_widget.dart';
 
@@ -44,12 +43,12 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
 
   TextStyle _getMentionStyle(String mentionText) {
     // Extract the username from the mention text (remove @ and [ ])
-    final username = mentionText.replaceAll(RegExp(r'[@\[\]]'), '');
-
+    final mentionExcludeTriggerCharactor =
+        mentionText.replaceAll(RegExp(r'[@\[\]]'), '');
     // Check if this mention exists in the mentioned users list
-    final isValidMention = _messageInputController.mentionedUsers
-        .any((user) => user.id == username || user.name == username);
-
+    final isValidMention = _messageInputController.mentionedUsers.any((user) =>
+        user.id == mentionExcludeTriggerCharactor ||
+        user.name == mentionExcludeTriggerCharactor);
     // Return highlight style only for valid mentions
     return isValidMention ? mentionStyle : const TextStyle();
   }
@@ -63,8 +62,8 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
     if (widget.focusNode == null) {
       // Only dispose if we created the focus node
       _focusNode.unfocus();
+      _focusNode.dispose();
     }
-    _focusNode.dispose();
     super.dispose();
   }
 
@@ -116,8 +115,8 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
                   child: InkWell(
                     onTap: () {
                       messageInputController.addMentionedUser(mention);
-                      AutocompleteWidget.of(context).acceptAutocompleteOption(
-                          mention.id); //maybe replace id by name
+                      AutocompleteWidget.of(context)
+                          .acceptAutocompleteOption(mention.name);
                     },
                     child: MentionTile(
                       title: mention.name,
@@ -164,7 +163,9 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
           return;
         }
         FirebaseFirestore.instance.collection('public').add(
-            Message(sender: widget.user!.uid, message: trimmedValue).toMap());
+            _messageInputController.message
+                .copyWith(sender: widget.user!.uid, message: trimmedValue)
+                .toMap());
       },
     );
   }

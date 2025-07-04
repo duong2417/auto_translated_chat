@@ -30,6 +30,10 @@ class MentionModel {
       id: e['id'] ?? 'id null',
       name: e['name'] ?? 'name null',
       avatarUrl: e['avatarUrl'] as String?,
+      type: MentionType.values.firstWhere(
+        (type) => type.name == (e['type'] as String? ?? 'bot'),
+        orElse: () => MentionType.bot,
+      ), //or use MentionType.values.byName(e['type'] ?? 'bot') ?? MentionType.bot
     );
   }
 }

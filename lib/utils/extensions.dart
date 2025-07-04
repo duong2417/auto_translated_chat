@@ -8,6 +8,7 @@ extension MessageX on Message {
     for (final user in mentionedUsers.toSet()) {
       final userId = user.id;
       final userName = user.name;
+      // print('Replacing mentions: $userId, $userName');
       if (linkify) {
         messageTextToRender = messageTextToRender.replaceAll(
           RegExp('@($userId|$userName)'),

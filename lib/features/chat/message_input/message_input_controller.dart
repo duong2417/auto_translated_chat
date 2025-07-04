@@ -86,15 +86,6 @@ class MessageInputController extends ValueNotifier<Message> {
   }
 
   /// Sets the [message], to empty.
-  ///
-  /// After calling this function, [text], [attachments] and [mentionedUsers]
-  /// will all be empty.
-  ///
-  /// Calling this will notify all the listeners of this
-  /// [StreamMessageInputController] that they need to update
-  /// (calls [notifyListeners]). For this reason,
-  /// this method should only be called between frames, e.g. in response to user
-  /// actions, not during the build, layout, or paint phases.
   void clear() {
     message = message.clear();
   }
@@ -127,6 +118,10 @@ class MessageInputController extends ValueNotifier<Message> {
 
   /// Adds a user to the list of mentioned users.
   void addMentionedUser(MentionModel user) {
+    if (mentionedUsers.any((it) => it.id == user.id)) {
+      // User is already mentioned, no need to add again.
+      return;
+    }
     mentionedUsers = [...mentionedUsers, user];
   }
 
