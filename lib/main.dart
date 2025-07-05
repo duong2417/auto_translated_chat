@@ -1,3 +1,8 @@
+// Copyright (c) 2024 suesitran. All rights reserved.
+// Original project: Auto Translated Chat
+// Author: suesitran
+// Repository: https://github.com/suesitran/auto_translated_chat
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';

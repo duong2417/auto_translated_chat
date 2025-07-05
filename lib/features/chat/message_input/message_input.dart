@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:public_chat/_shared/simple_safe_area.dart';
+import 'package:public_chat/_shared/widgets/simple_safe_area.dart';
 import 'package:public_chat/_shared/widgets/message_box_widget.dart';
 
-import 'auto_complete/auto_complete_options.dart';
-import 'auto_complete/input_auto_complete.dart';
-import 'auto_complete/triggers.dart';
-import 'constants.dart';
-import 'message_input_controller.dart';
+import '../auto_complete/auto_complete_options.dart';
+import '../auto_complete/input_auto_complete.dart';
+import '../auto_complete/triggers.dart';
+import '../../../utils/constants.dart';
+import 'controllers/message_input_controller.dart';
 import 'models/mention_model.dart';
-import 'widgets/mention_tile.dart';
+import '../widgets/mention_tile.dart';
 
 class ChatMessageInput extends StatefulWidget {
   final User? user;
@@ -46,7 +46,7 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
     final mentionExcludeTriggerCharactor =
         mentionText.replaceAll(RegExp(r'[@\[\]]'), '');
     // Check if this mention exists in the mentioned users list
-    final isValidMention = _messageInputController.mentionedUsers.any((user) =>
+    final isValidMention = defaultMentions.any((user) =>
         user.id == mentionExcludeTriggerCharactor ||
         user.name == mentionExcludeTriggerCharactor);
     // Return highlight style only for valid mentions
@@ -68,10 +68,6 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
   }
 
   List<MentionModel> _fetchMentions(String query) {
-    // FirebaseFirestore.instance
-    //     .collection('bots')
-    //     .where('name', isEqualTo: query)
-    //     .get();
     return defaultMentions
         .where(
             (mention) => mention.id.toLowerCase().contains(query.toLowerCase()))
@@ -154,6 +150,11 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
       key: const Key('messageInputText'),
       controller: _messageInputController.textFieldController,
       focusNode: _focusNode,
+      prefixIcon: IconButton(
+          icon: const Icon(Icons.flash_on),
+          onPressed: () {
+            _messageInputController.text = '@';
+          }),
       onSendMessage: (value) {
         final trimmedValue = value.trim();
         if (widget.user == null ||

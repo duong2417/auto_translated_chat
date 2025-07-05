@@ -1,7 +1,7 @@
 // ignore_for_file: no-empty-block
 
 import 'package:flutter/material.dart';
-import 'package:public_chat/features/chat/message_input/constants.dart';
+import 'package:public_chat/utils/constants.dart';
 
 /// A helper widget used to show the options of a [StreamAutocomplete].
 class AutocompleteOptions<T extends Object> extends StatelessWidget {

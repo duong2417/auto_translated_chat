@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
-import 'package:public_chat/features/chat/message_input/message_text_field_controller.dart';
+import 'package:public_chat/features/chat/message_input/controllers/message_text_field_controller.dart';
 
-import 'models/mention_model.dart';
+import '../models/mention_model.dart';
 
 class MessageInputController extends ValueNotifier<Message> {
   /// Creates a controller for an editable text field.

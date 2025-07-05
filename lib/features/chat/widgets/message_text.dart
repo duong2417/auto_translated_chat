@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
 import 'package:public_chat/features/chat/message_input/models/mention_model.dart';
-import 'package:public_chat/features/chat/message_input/constants.dart';
+import 'package:public_chat/utils/constants.dart';
 import 'package:public_chat/utils/extensions.dart';
 
 class MessageText extends StatelessWidget {

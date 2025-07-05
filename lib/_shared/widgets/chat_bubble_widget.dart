@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
-import 'package:public_chat/_shared/widgets/message_text.dart';
+import 'package:public_chat/features/chat/widgets/message_text.dart';
 
 import '../../utils/global.dart';
 

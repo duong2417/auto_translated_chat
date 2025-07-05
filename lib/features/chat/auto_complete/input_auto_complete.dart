@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
-import 'package:public_chat/features/chat/message_input/message_input_controller.dart';
-import 'package:public_chat/features/chat/message_input/typedefs.dart';
+import 'package:public_chat/features/chat/message_input/controllers/message_input_controller.dart';
+import 'package:public_chat/utils/typedefs.dart';
 import 'package:rate_limiter/rate_limiter.dart';
 
 import 'triggers.dart';

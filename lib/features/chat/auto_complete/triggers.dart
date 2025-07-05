@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
-import 'package:public_chat/features/chat/message_input/typedefs.dart';
+import 'package:public_chat/utils/typedefs.dart';
 
 class AutocompleteTrigger {
   /// The trigger character for the autocomplete: for example, '@' for mentions.

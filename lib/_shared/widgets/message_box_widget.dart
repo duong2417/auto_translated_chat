@@ -4,8 +4,10 @@ class MessageBox extends StatefulWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final ValueChanged<String> onSendMessage;
+  final Widget? prefixIcon;
   const MessageBox(
       {required this.onSendMessage,
+      this.prefixIcon,
       super.key,
       this.controller,
       this.focusNode});
@@ -43,6 +45,7 @@ class _MessageBoxState extends State<MessageBox> {
                 borderSide:
                     const BorderSide(color: Colors.black38, width: 1.0)),
             contentPadding: const EdgeInsets.symmetric(horizontal: 12.0),
+            prefixIcon: widget.prefixIcon,
             suffixIcon: IconButton(
               onPressed: () {
                 widget.onSendMessage(_controller.text);
