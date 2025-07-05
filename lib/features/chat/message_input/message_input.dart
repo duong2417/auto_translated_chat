@@ -153,7 +153,10 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
       prefixIcon: IconButton(
           icon: const Icon(Icons.flash_on),
           onPressed: () {
-            _messageInputController.text = '@';
+            final text = _messageInputController.textFieldController.text;
+            if (!text.endsWith(kMentionTrigger)) {
+              _messageInputController.text += kMentionTrigger;
+            }
           }),
       onSendMessage: (value) {
         final trimmedValue = value.trim();
