@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:public_chat/_shared/widgets/simple_safe_area.dart';
 import 'package:public_chat/_shared/widgets/message_box_widget.dart';
+import 'package:public_chat/features/chat/auto_complete/auto_complete_options.dart';
+import 'package:public_chat/features/chat/auto_complete/input_auto_complete.dart';
+import 'package:public_chat/features/chat/auto_complete/triggers.dart';
+import 'package:public_chat/features/chat/widgets/mention_tile.dart';
+import 'package:public_chat/repository/database.dart';
+import 'package:public_chat/service_locator/service_locator.dart';
+import 'package:public_chat/utils/constants.dart';
 import 'package:public_chat/utils/extensions.dart';
 import 'package:public_chat/utils/helper.dart';
 
-import '../auto_complete/auto_complete_options.dart';
-import '../auto_complete/input_auto_complete.dart';
-import '../auto_complete/triggers.dart';
-import '../../../utils/constants.dart';
 import 'controllers/message_input_controller.dart';
 import 'models/mention_model.dart';
-import '../widgets/mention_tile.dart';
 
 class ChatMessageInput extends StatefulWidget {
   final MessageInputController? messageInputController;
@@ -29,14 +31,22 @@ class ChatMessageInput extends StatefulWidget {
 class _ChatMessageInputState extends State<ChatMessageInput> {
   late final MessageInputController _messageInputController;
   late final FocusNode _focusNode;
+  List<MentionModel> _mentions = [];
   @override
   void initState() {
     super.initState();
     _messageInputController = widget.messageInputController ??
-        MessageInputController(
-          textPatternStyle: mentionPattern(),
-        );
+        MessageInputController(textPatternStyle: mentionPattern());
     _focusNode = widget.focusNode ?? FocusNode();
+    ServiceLocator.instance.get<Database>().getMentions().then((snap) {
+      if (snap.docs.isNotEmpty) {
+        final mentions = snap.docs.map((doc) => doc.data()).toList();
+        _mentions = mentions;
+      } else {
+        _mentions = defaultMentions;
+        ServiceLocator.instance.get<Database>().setMentions(_mentions);
+      }
+    });
   }
 
   @override
@@ -54,7 +64,7 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
   }
 
   List<MentionModel> _fetchMentions(String query) {
-    return defaultMentions.where((mention) => mention.contains(query)).toList();
+    return _mentions.where((mention) => mention.contains(query)).toList();
   }
 
   Widget _buildMessageInput(

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
+import 'package:public_chat/features/chat/message_input/models/mention_model.dart';
 
 final class Database {
   static Database? _instance;
@@ -12,8 +13,37 @@ final class Database {
     return _instance!;
   }
 
+  final String _mentions = 'mentions';
   final String _publicRoom = 'public';
   final String _userList = 'users';
+
+  Future<QuerySnapshot<MentionModel>> getMentions() {
+    return FirebaseFirestore.instance
+        .collection(_mentions)
+        .withConverter(
+          fromFirestore: (snapshot, options) =>
+              MentionModel.fromMap(snapshot.data() ?? {}),
+          toFirestore: (mention, options) => mention.toJson(),
+        )
+        .get();
+  }
+
+  void setMentions(List<MentionModel> mentions) {
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+    for (final mention in mentions) {
+      final DocumentReference<MentionModel> docRef = FirebaseFirestore.instance
+          .collection(_mentions)
+          .doc(mention.id)
+          .withConverter(
+            fromFirestore: (snapshot, options) =>
+                MentionModel.fromMap(snapshot.data() ?? {}),
+            toFirestore: (mention, options) => mention.toJson(),
+          );
+      batch.set(docRef, mention);
+    }
+    batch.commit();
+  }
+
   void writePublicMessage(Message message) {
     FirebaseFirestore.instance.collection(_publicRoom).add(message.toMap());
   }
