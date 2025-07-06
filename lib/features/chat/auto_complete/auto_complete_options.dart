@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:public_chat/utils/constants.dart';
 
-/// A helper widget used to show the options of a [StreamAutocomplete].
+/// A helper widget used to show the options of a [AutocompleteWidget].
 class AutocompleteOptions<T extends Object> extends StatelessWidget {
   /// Creates a [AutocompleteOptions] widget.
   const AutocompleteOptions({
@@ -20,8 +20,6 @@ class AutocompleteOptions<T extends Object> extends StatelessWidget {
   });
 
   /// The background color of the options card.
-  ///
-  /// Defaults to [StreamColorTheme.barsBg].
   final Color? color;
 
   /// The elevation of the options card.

@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:public_chat/_shared/widgets/simple_safe_area.dart';
 import 'package:public_chat/_shared/widgets/message_box_widget.dart';
+import 'package:public_chat/utils/extensions.dart';
+import 'package:public_chat/utils/helper.dart';
 
 import '../auto_complete/auto_complete_options.dart';
 import '../auto_complete/input_auto_complete.dart';
@@ -13,14 +13,14 @@ import 'models/mention_model.dart';
 import '../widgets/mention_tile.dart';
 
 class ChatMessageInput extends StatefulWidget {
-  final User? user;
   final MessageInputController? messageInputController;
   final FocusNode? focusNode;
+  final Function(MessageInputController) onSendMessage;
   const ChatMessageInput(
       {super.key,
       this.messageInputController,
-      required this.user,
-      this.focusNode});
+      this.focusNode,
+      required this.onSendMessage});
 
   @override
   State<ChatMessageInput> createState() => _ChatMessageInputState();
@@ -34,23 +34,9 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
     super.initState();
     _messageInputController = widget.messageInputController ??
         MessageInputController(
-          textPatternStyle: {
-            kMentionPattern: (context, text) => _getMentionStyle(text),
-          },
+          textPatternStyle: mentionPattern(),
         );
     _focusNode = widget.focusNode ?? FocusNode();
-  }
-
-  TextStyle _getMentionStyle(String mentionText) {
-    // Extract the username from the mention text (remove @ and [ ])
-    final mentionExcludeTriggerCharactor =
-        mentionText.replaceAll(RegExp(r'[@\[\]]'), '');
-    // Check if this mention exists in the mentioned users list
-    final isValidMention = defaultMentions.any((user) =>
-        user.id == mentionExcludeTriggerCharactor ||
-        user.name == mentionExcludeTriggerCharactor);
-    // Return highlight style only for valid mentions
-    return isValidMention ? mentionStyle : const TextStyle();
   }
 
   @override
@@ -68,10 +54,7 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
   }
 
   List<MentionModel> _fetchMentions(String query) {
-    return defaultMentions
-        .where(
-            (mention) => mention.id.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    return defaultMentions.where((mention) => mention.contains(query)).toList();
   }
 
   Widget _buildMessageInput(
@@ -159,17 +142,7 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
             }
           }),
       onSendMessage: (value) {
-        final trimmedValue = value.trim();
-        if (widget.user == null ||
-            widget.user!.uid.isEmpty ||
-            trimmedValue.isEmpty) {
-          // do nothing
-          return;
-        }
-        FirebaseFirestore.instance.collection('public').add(
-            _messageInputController.message
-                .copyWith(sender: widget.user!.uid, message: trimmedValue)
-                .toMap());
+        widget.onSendMessage(_messageInputController);
       },
     );
   }

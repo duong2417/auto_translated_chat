@@ -10,7 +10,8 @@ class MentionModel {
     this.avatarUrl,
     this.type = MentionType.bot,
   });
-
+  String get nameLower => name.toLowerCase();
+  String get idLower => id.toLowerCase();
   @override
   String toString() {
     return toJson().toString();

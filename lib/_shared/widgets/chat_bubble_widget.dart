@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
 import 'package:public_chat/features/chat/widgets/message_text.dart';
+import 'package:public_chat/utils/helper.dart';
 
 import '../../utils/global.dart';
 
@@ -71,6 +72,7 @@ class ChatBubble extends StatelessWidget {
           // original language
           messageModel != null
               ? MessageText(
+                  textPatternStyle: mentionPattern(),
                   message: messageModel!,
                   style: Theme.of(context)
                       .textTheme

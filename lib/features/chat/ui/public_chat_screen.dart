@@ -8,6 +8,7 @@ import 'package:public_chat/_shared/bloc/user_manager/user_manager_cubit.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
 import 'package:public_chat/_shared/widgets/chat_bubble_widget.dart';
 import 'package:public_chat/features/chat/bloc/chat_cubit.dart';
+import 'package:public_chat/features/chat/message_input/controllers/message_input_controller.dart';
 import 'package:public_chat/features/chat/message_input/message_input.dart';
 import 'package:public_chat/utils/locale_support.dart';
 
@@ -78,7 +79,23 @@ class PublicChatScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                ChatMessageInput(user: user),
+                ChatMessageInput(
+                  onSendMessage:
+                      (MessageInputController messageInputController) {
+                    if (user == null ||
+                        user.uid.isEmpty ||
+                        messageInputController.isEmptyText) {
+                      // do nothing
+                      return;
+                    }
+                    FirebaseFirestore.instance.collection('public').add(
+                        messageInputController.message
+                            .copyWith(
+                                sender: user.uid,
+                                message: messageInputController.trimText)
+                            .toMap());
+                  },
+                ),
               ],
             )),
       ),

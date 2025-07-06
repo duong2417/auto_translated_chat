@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:public_chat/_shared/data/chat_data.dart';
 import 'package:public_chat/features/chat/message_input/controllers/message_text_field_controller.dart';
+import 'package:public_chat/utils/typedefs.dart';
 
 import '../models/mention_model.dart';
 
@@ -11,7 +12,7 @@ class MessageInputController extends ValueNotifier<Message> {
   /// message.
   factory MessageInputController({
     Message? message,
-    Map<RegExp, TextStyleBuilder>? textPatternStyle,
+    TextPatternStyleMap? textPatternStyle,
   }) =>
       MessageInputController._(
         initialMessage: message ?? Message(message: '', sender: ''),
@@ -33,6 +34,10 @@ class MessageInputController extends ValueNotifier<Message> {
   /// Returns the controller of the text field linked to this controller.
   MessageTextFieldController get textFieldController => _textFieldController;
   MessageTextFieldController _textFieldController;
+
+  String get textFieldText => _textFieldController.text;
+  String get trimText => textFieldText.trim();
+  bool get isEmptyText => trimText.isEmpty;
 
   Message _initialMessage;
   static TextEditingValue _textEditingValueFromMessage(Message message) {

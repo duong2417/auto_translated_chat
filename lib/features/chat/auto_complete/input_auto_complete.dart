@@ -14,7 +14,7 @@ class AutocompleteWidget extends StatefulWidget {
   /// Builds the field whose input is used to get the options.
   ///
   /// Pass the provided [MessageInputController] to the field built
-  /// here so that StreamAutocomplete can listen for changes.
+  /// here so that AutocompleteWidget can listen for changes.
   final MyAutocompleteFieldViewBuilder fieldViewBuilder;
 
   /// If this parameter is not null, then [focusNode] must also be not null.
@@ -34,7 +34,7 @@ class AutocompleteWidget extends StatefulWidget {
   });
   static AutocompleteWidgetState of(BuildContext context) {
     final state = context.findAncestorStateOfType<AutocompleteWidgetState>();
-    assert(state != null, 'StreamAutocomplete not found in the widget tree');
+    assert(state != null, 'AutocompleteWidget not found in the widget tree');
     return state!;
   }
 

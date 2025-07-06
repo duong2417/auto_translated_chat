@@ -15,3 +15,11 @@ typedef MyAutocompleteOptionsViewBuilder = Widget Function(
   AutocompleteQuery autocompleteQuery,
   MessageInputController messageEditingController,
 );
+
+/// A function that takes a [BuildContext] and returns a [TextStyle].
+typedef TextStyleBuilder = TextStyle? Function(
+  BuildContext context,
+  String text,
+);
+
+typedef TextPatternStyleMap = Map<RegExp, TextStyleBuilder>;
