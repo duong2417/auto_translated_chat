@@ -12,7 +12,7 @@ final class Message {
   final List<MentionModel> mentionedUsers;
 
   Message({required this.message, required this.sender})
-      : id = '',
+      : id = DateTime.now().millisecondsSinceEpoch.toString(), // Generate a timestamp-based ID
         timestamp = Timestamp.now(),
         translations = {},
         mentionedUsers = [];
@@ -57,7 +57,7 @@ final class Message {
 
   Message clear() {
     return Message.fromMap(
-      '',
+      DateTime.now().millisecondsSinceEpoch.toString(), // Generate a timestamp-based ID
       {
         'message': '',
         'sender': '',

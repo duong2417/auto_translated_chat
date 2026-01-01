@@ -1,0 +1,2 @@
+/Users/nguyenthingocduong/auto_translated_chat/android/app/.cxx/Debug/3v1w1s3e/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/nguyenthingocduong/auto_translated_chat/android/app/.cxx/Debug/3v1w1s3e/armeabi-v7a/CMakeFiles/rebuild_cache.dir

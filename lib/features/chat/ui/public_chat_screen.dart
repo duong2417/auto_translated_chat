@@ -82,16 +82,16 @@ class PublicChatScreen extends StatelessWidget {
                 ChatMessageInput(
                   onSendMessage:
                       (MessageInputController messageInputController) {
-                    if (user == null ||
-                        user.uid.isEmpty ||
-                        messageInputController.isEmptyText) {
-                      // do nothing
-                      return;
-                    }
+                    // if (user == null ||
+                    //     user.uid.isEmpty ||
+                    //     messageInputController.isEmptyText) {
+                    //   // do nothing
+                    //   return;
+                    // }
                     FirebaseFirestore.instance.collection('public').add(
                         messageInputController.message
                             .copyWith(
-                                sender: user.uid,
+                                sender: user?.uid ?? 'uid null',
                                 message: messageInputController.trimText)
                             .toMap());
                   },

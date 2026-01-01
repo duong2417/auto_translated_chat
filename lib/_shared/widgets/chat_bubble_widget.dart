@@ -29,7 +29,7 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgets = [];
-
+    print('translations: $translations');
     // user avatar
     widgets.add(Padding(
       padding: const EdgeInsets.all(8.0),
@@ -89,10 +89,10 @@ class ChatBubble extends StatelessWidget {
           if (translations.isNotEmpty &&
               translations.containsKey(Global.localLanguageCode) &&
               translations[Global.localLanguageCode] != null)
-            if (kDebugMode)
-              buildTranslation(context: context, isMine: isMine)
-            else if (!isMine) //in production mode, only show translation for other users, not mine
-              buildTranslation(context: context, isMine: isMine)
+            // if (kDebugMode)
+            buildTranslation(context: context, isMine: isMine)
+          else if (!isMine) //in production mode, only show translation for other users, not mine
+            buildTranslation(context: context, isMine: isMine)
         ],
       ),
     ));

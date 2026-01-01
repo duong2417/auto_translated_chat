@@ -39,6 +39,7 @@ dependencies:
   universal_html: ^2.2.4
   flutter_portal: ^1.1.4
   rate_limiter: ^1.0.0
+  cloud_functions: ^4.7.6
 
 dev_dependencies:
   flutter_test:

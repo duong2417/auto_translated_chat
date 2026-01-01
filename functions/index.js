@@ -4,9 +4,10 @@ const admin = require("firebase-admin");
 
 admin.initializeApp();
 
+// const project = "atc-dev-90f4c";
 const project = "proj-atc";
 const location = "us-central1";
-const textModel = "gemini-1.5-flash";
+const textModel = "gemini-2.0-flash";
 // const visionModel = 'gemini-1.0-pro-vision';
 async function saveNewLanguageCode(languagesCollection, detectedLanguage, languages) {
   if (detectedLanguage && !languages.includes(detectedLanguage)) {
@@ -35,12 +36,19 @@ const generativeModelPreview = vertexAI.preview.getGenerativeModel({
 // use onDocumentWritten here to prepare for "edit message" feature later
 exports.onChatWritten = v2.firestore.onDocumentWritten("/public/{messageId}", async (event) => {
   const document = event.data.after.data();
-  const message = document["message"];
+  // Check if we have a valid document
+  if (!document) {
+    console.log("No document data available");
+    return null;
+  }
+  
+  const message = document["message"] || "";
   console.log(`message: ${message}`);
 
   // no message? do nothing
-  if (message == undefined) {
-    return;
+  if (!message) {
+    console.log("Empty message, skipping translation");
+    return null;
   }
   const curTranslated = document["translated"];
 
@@ -110,24 +118,57 @@ If you can't detect the language, return "und" as value of "detectedLanguage" fi
   const response = result.response;
   console.log("Response:", JSON.stringify(response));
 
+  // Check if we have valid response content
+  if (!response || !response.candidates || !response.candidates[0] || !response.candidates[0].content) {
+    console.error("Invalid or empty response from translation service");
+    return null;
+  }
+
   const responseContent = response.candidates[0].content;
   let translationData = null;
   let detectedLanguage = null;
 
   try {
+    // Make sure we have text content to parse
+    if (!responseContent.parts || !responseContent.parts[0] || !responseContent.parts[0].text) {
+      throw new Error("Response content does not contain expected text parts");
+    }
+    
     // Extract JSON from text part (remove markdown ``` characters)
     const jsonText = responseContent.parts[0].text.replace(/```json\n|\n```/g, "");
     translationData = JSON.parse(jsonText);
+    
+    if (!translationData) {
+      throw new Error("Parsed translation data is null or undefined");
+    }
+    
     detectedLanguage = translationData.detectedLanguage;
     console.log("Detected language:", detectedLanguage);
-    console.log("Translation data:", translationData.translation);
+    
+    if (translationData.translation) {
+      console.log("Translation data:", translationData.translation);
+    } else {
+      console.log("No translation data available");
+      translationData.translation = {}; // Ensure we have an empty object at minimum
+    }
   } catch (error) {
     console.error("Error parsing translation response:", error);
+    // Set defaults to prevent issues with document updates
+    translationData = { 
+      detectedLanguage: "und",
+      translation: {}
+    };
   }
 
   // Save new language if detected
   if (detectedLanguage && detectedLanguage !== "und") {
     await saveNewLanguageCode(languagesCollection, detectedLanguage, languages);
+  }
+
+  // Check if translationData is valid before updating
+  if (!translationData || !translationData.translation) {
+    console.error("Error: Translation data is invalid or missing");
+    return null;
   }
 
   // Update document with translation
